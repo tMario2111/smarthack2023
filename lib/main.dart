@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'router/home_route.dart';
+import 'routes/home_route.dart';
 
 import 'pb_instance.dart';
 
