@@ -12,23 +12,17 @@ class HomeRoute extends StatefulWidget {
 }
 
 class _HomeRouteState extends State<HomeRoute> {
-  void test() async {
-    final list = await PbInstance.getPb().collection('schools').getList();
-    print(list.items[0].id);
-  }
-
   @override
   Widget build(BuildContext context) {
-    test();
     return Scaffold(
       appBar: AppBar(
-        title: Text('School Buddy'),
+        title: const Text('School Buddy'),
       ),
       drawer: Drawer(
         child: ListView(
           padding: EdgeInsets.zero,
           children: <Widget>[
-            DrawerHeader(
+            const DrawerHeader(
               decoration: BoxDecoration(
                 color: Colors.purple,
               ),
@@ -41,27 +35,26 @@ class _HomeRouteState extends State<HomeRoute> {
               ),
             ),
             ListTile(
-              title: Text('Dashboard'),
+              title: const Text('Dashboard'),
               onTap: () {
                 Navigator.pop(context);
               },
             ),
             ListTile(
-              title: Text('My Progress'),
+              title: const Text('My Progress'),
               onTap: () {
                 Navigator.pop(context);
               },
             ),
             ListTile(
-              title: Text('Feedback'),
-              onTap: (){
-                Navigator.pop(context);
-              }
-            ),
+                title: const Text('Feedback'),
+                onTap: () {
+                  Navigator.pop(context);
+                }),
           ],
         ),
       ),
-      body: Center(
+      body: const Center(
         child: Text('Your main content goes here'),
       ),
     );

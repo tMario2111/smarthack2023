@@ -5,7 +5,7 @@ class PbInstance {
 
   static void init() async {
     _pb = PocketBase('http://127.0.0.1:8090');
-    final authData = await _pb
+    await _pb
         .collection('students')
         .authWithPassword('ungureanuv@cnmk.com', '12345678');
   }
