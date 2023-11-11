@@ -19,38 +19,59 @@ class _HomeRouteState extends State<HomeRoute> {
         title: const Text('School Buddy'),
       ),
       drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
+        child: Column(
           children: [
-            const DrawerHeader(
-              decoration: BoxDecoration(
-                color: Colors.purple,
-              ),
-              child: Text(
-                'Menu',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 24,
-                ),
+            Expanded(
+              child: ListView(
+                padding: EdgeInsets.zero,
+                children: [
+                  const DrawerHeader(
+                    decoration: BoxDecoration(
+                      color: Colors.purple,
+                    ),
+                    child: Text(
+                      'Menu',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 24,
+                      ),
+                    ),
+                  ),
+                  ListTile(
+                    title: const Text('Dashboard'),
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
+                  ),
+                  ListTile(
+                    title: const Text('My Progress'),
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
+                  ),
+                  ListTile(
+                    title: const Text('Feedback'),
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
+                  ),
+                ],
               ),
             ),
+            Divider(), // Add a divider for visual separation
             ListTile(
-              title: const Text('Dashboard'),
+              title: Row(
+                children: [
+                  Icon(Icons.logout),
+                  SizedBox(width: 10),
+                  Text('Logout'),
+                ],
+              ),
               onTap: () {
+                // Implement your logout functionality here
                 Navigator.pop(context);
               },
             ),
-            ListTile(
-              title: const Text('My Progress'),
-              onTap: () {
-                Navigator.pop(context);
-              },
-            ),
-            ListTile(
-                title: const Text('Feedback'),
-                onTap: () {
-                  Navigator.pop(context);
-                }),
           ],
         ),
       ),
