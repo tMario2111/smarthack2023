@@ -4,8 +4,8 @@ import 'routes/home_route.dart';
 
 import 'pb_instance.dart';
 
-void main() {
-  PbInstance.init();
+void main() async {
+  await PbInstance.init();
   runApp(const MyApp());
 }
 

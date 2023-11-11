@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:smarthack2023/pb_instance.dart';
 
 import '../widgets/side_drawer.dart';
 
@@ -16,7 +17,7 @@ class _HomeRouteState extends State<HomeRoute> {
     var now = DateTime.now();
 
     String formattedDate = DateFormat.yMMMMd().format(now).toString();
-    String userName = 'YourName';
+    String userName = PbInstance.first_name!;
 
     return Scaffold(
       appBar: AppBar(
@@ -41,11 +42,9 @@ class _HomeRouteState extends State<HomeRoute> {
           ),
           child: Row(
             children: [
-              // Partea stângă a containerului
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Date in the top left corner
                   Text(
                     formattedDate,
                     style: const TextStyle(
@@ -72,15 +71,14 @@ class _HomeRouteState extends State<HomeRoute> {
                   ),
                 ],
               ),
-              // Partea dreaptă a containerului cu imaginea
               Expanded(
                 child: Container(
-                  padding: const EdgeInsets.only(right: 35),
+                  padding: const EdgeInsets.only(right: 0),
                   alignment: Alignment.centerRight,
                   child: Image.asset(
                     '../../assets/welcome_student.png',
-                    width: 300,
-                    height: 300,
+                    width: 500,
+                    height: 500,
                   ),
                 ),
               ),

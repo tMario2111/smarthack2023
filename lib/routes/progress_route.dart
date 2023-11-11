@@ -119,27 +119,29 @@ class _ProgressRouteState extends State<ProgressRoute> {
         title: const Text('My Progress'),
       ),
       drawer: sideDrawer(context),
-      body: Center(
-        child: Column(
-          children: [
-            const SizedBox(
-              height: 25.0,
-            ),
-            Row(
-              children: [
-                const SizedBox(
-                  width: 25.0,
-                ),
-                Expanded(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: _progressBarRows,
+      body: SingleChildScrollView(
+        child: Center(
+          child: Column(
+            children: [
+              const SizedBox(
+                height: 25.0,
+              ),
+              Row(
+                children: [
+                  const SizedBox(
+                    width: 25.0,
                   ),
-                ),
-              ],
-            ),
-          ],
+                  Expanded(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: _progressBarRows,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
