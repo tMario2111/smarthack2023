@@ -21,13 +21,13 @@ class _HomeRouteState extends State<HomeRoute> {
       drawer: Drawer(
         child: ListView(
           padding: EdgeInsets.zero,
-          children: <Widget>[
+          children: [
             const DrawerHeader(
               decoration: BoxDecoration(
                 color: Colors.purple,
               ),
               child: Text(
-                'Meniu',
+                'Menu',
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 24,
@@ -54,9 +54,7 @@ class _HomeRouteState extends State<HomeRoute> {
           ],
         ),
       ),
-      body: const Center(
-        child: Text('Your main content goes here'),
-      ),
+      body: const Center(),
     );
   }
 }
