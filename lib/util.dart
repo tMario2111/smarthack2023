@@ -13,3 +13,19 @@ String getTeacherStudentScoreTypeString(TeacherStudentScoreType scoreType) {
     return "Homework";
   }
 }
+
+enum StudentTeacherScoreType {
+  teachingEfficiency,
+  comunicationSkills,
+  studentInteractions
+}
+
+String getStudentTeacherScoreTypeString(StudentTeacherScoreType scoreType) {
+  if (scoreType == StudentTeacherScoreType.teachingEfficiency) {
+    return 'Teaching Efficiency';
+  } else if (scoreType == StudentTeacherScoreType.comunicationSkills) {
+    return 'Communication Skills';
+  } else {
+    return 'Student Interactions';
+  }
+}

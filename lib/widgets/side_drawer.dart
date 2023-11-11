@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../routes/home_route.dart';
 import '../routes/progress_route.dart';
+import '../routes/feedback_route.dart';
 
 Drawer sideDrawer(BuildContext context) {
   return Drawer(
@@ -44,7 +45,10 @@ Drawer sideDrawer(BuildContext context) {
               ListTile(
                 title: const Text('Feedback'),
                 onTap: () {
-                  Navigator.pop(context);
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const FeedbackRoute()));
                 },
               ),
             ],

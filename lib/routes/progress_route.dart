@@ -17,7 +17,7 @@ class ProgressRoute extends StatefulWidget {
 
 class _ProgressRouteState extends State<ProgressRoute> {
   var _dataFetched = false;
-  final _ratings = Map<String, Map<TeacherStudentScoreType, List<int>>>();
+  final _ratings = <String, Map<TeacherStudentScoreType, List<int>>>{};
   final _progressBarRows = <Column>[];
 
   void _getData() async {
@@ -61,7 +61,9 @@ class _ProgressRouteState extends State<ProgressRoute> {
                 animationDuration: 1,
                 onGetText: (p0) {
                   return Text(
-                    "${(p0 / 10.0).floor()}.${p0.floor() % 10}",
+                    key == TeacherStudentScoreType.attendance
+                        ? "${p0.toStringAsFixed(2)}%"
+                        : "${(p0 / 10.0).floor()}.${p0.floor() % 10} / 10",
                     style: const TextStyle(
                         fontSize: 20, fontWeight: FontWeight.bold),
                   );
