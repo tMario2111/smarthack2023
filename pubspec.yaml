@@ -37,6 +37,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   pocketbase: ^0.16.0
   simple_circular_progress_bar: ^1.0.2
+  intl: ^0.18.1
 
 dev_dependencies:
   flutter_test:
@@ -62,8 +63,8 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   # assets:
-  #   - images/a_dot_burr.jpeg
-  #   - images/a_dot_ham.jpeg
+  #  - assets/welcome_student.png
+  #  - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
