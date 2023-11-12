@@ -1,5 +1,3 @@
-import 'dart:html';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:smarthack2023/util.dart';
@@ -16,8 +14,9 @@ class FeedbackRoute extends StatefulWidget {
 }
 
 class _FeedbackRouteState extends State<FeedbackRoute> {
-  var _data_fetched = false;
+  var _dataFetched = false;
   final _teacherList = <String, String>{};
+  final _studentList = <String, String>{};
   var _dropDownValue = '';
   final _textFieldControllers = List<TextEditingController>.generate(
       StudentTeacherScoreType.values.length,
@@ -25,43 +24,72 @@ class _FeedbackRouteState extends State<FeedbackRoute> {
 
   void _fetchData() async {
     final pb = PbInstance.getPb();
-    final user_id = PbInstance.id;
-    final class_id =
-        (await pb.collection('students').getOne(user_id, expand: 'class'))
-            .expand['class']![0]
-            .id;
+    final userId = PbInstance.id;
 
-    final teachers =
-        (await pb.collection('teachers').getList(expand: 'classes')).items;
-    for (final teacher in teachers) {
-      for (final class_ in teacher.expand['classes']!) {
-        if (class_.id == class_id) {
-          if ((await pb.collection('student_teacher_ratings').getList(
+    if (PbInstance.isTeacher) {
+      final classes =
+          (await pb.collection('teachers').getOne(userId, expand: 'classes'))
+              .expand['classes']!
+              .toList();
+      for (final cl in classes) {
+        final students = (await pb
+                .collection('students')
+                .getList(filter: 'class.id = "${cl.id}"'))
+            .items;
+
+        for (final student in students) {
+          if ((await pb.collection('teacher_student_ratings').getList(
                   filter:
-                      'teacher.id = "${teacher.id}" && student.id = "$user_id"'))
+                      'teacher.id = "$userId" && student.id = "${student.id}"'))
               .items
               .isNotEmpty) {
             continue;
           }
-          _teacherList[teacher.id] =
-              '${teacher.getStringValue('first_name')} ${teacher.getStringValue('last_name')}';
-          _dropDownValue = _teacherList[teacher.id]!;
+          _studentList[student.id] =
+              '${student.getStringValue('first_name')} ${student.getStringValue('last_name')}';
+          _dropDownValue = _studentList[student.id]!;
         }
       }
-    }
+      _dataFetched = true;
+      setState(() {});
+    } else {
+      final classId =
+          (await pb.collection('students').getOne(userId, expand: 'class'))
+              .expand['class']![0]
+              .id;
 
-    _data_fetched = true;
-    setState(() {});
+      final teachers =
+          (await pb.collection('teachers').getList(expand: 'classes')).items;
+      for (final teacher in teachers) {
+        for (final class_ in teacher.expand['classes']!) {
+          if (class_.id == classId) {
+            if ((await pb.collection('student_teacher_ratings').getList(
+                    filter:
+                        'teacher.id = "${teacher.id}" && student.id = "$userId"'))
+                .items
+                .isNotEmpty) {
+              continue;
+            }
+            _teacherList[teacher.id] =
+                '${teacher.getStringValue('first_name')} ${teacher.getStringValue('last_name')}';
+            _dropDownValue = _teacherList[teacher.id]!;
+          }
+        }
+      }
+
+      _dataFetched = true;
+      setState(() {});
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    if (!_data_fetched) {
+    if (!_dataFetched) {
       _fetchData();
     }
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Feedback'),
+        title: const Text('Give Feedback'),
       ),
       drawer: sideDrawer(context),
       body: Center(
@@ -69,10 +97,12 @@ class _FeedbackRouteState extends State<FeedbackRoute> {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            _data_fetched
+            _dataFetched
                 ? DropdownButton<String>(
                     value: _dropDownValue,
-                    items: _teacherList.entries.map((e) {
+                    items: (PbInstance.isTeacher ? _studentList : _teacherList)
+                        .entries
+                        .map((e) {
                       return DropdownMenuItem<String>(
                           value: e.value, child: Text(e.value));
                     }).toList(),
@@ -83,13 +113,19 @@ class _FeedbackRouteState extends State<FeedbackRoute> {
                     },
                   )
                 : const Center(),
-            for (final i in StudentTeacherScoreType.values)
+            for (final i in PbInstance.isTeacher
+                ? TeacherStudentScoreType.values
+                : StudentTeacherScoreType.values)
               SizedBox(
                 width: 400.0,
                 child: TextField(
                   controller: _textFieldControllers[i.index],
                   decoration: InputDecoration(
-                    hintText: getStudentTeacherScoreTypeString(i),
+                    hintText: PbInstance.isTeacher
+                        ? getTeacherStudentScoreTypeString(
+                            i as TeacherStudentScoreType)
+                        : getStudentTeacherScoreTypeString(
+                            i as StudentTeacherScoreType),
                   ),
                   inputFormatters: [
                     FilteringTextInputFormatter.digitsOnly,
@@ -116,24 +152,38 @@ class _FeedbackRouteState extends State<FeedbackRoute> {
                 for (final controller in _textFieldControllers) {
                   final value = int.parse(controller.text);
 
-                  final model = await PbInstance.getPb()
-                      .collection('student_teacher_ratings')
-                      .create(body: {
-                    'student': PbInstance.id,
-                    'teacher': _teacherList.entries
-                        .firstWhere(
-                            (element) => element.value == _dropDownValue)
-                        .key,
-                    'type': i,
-                    'value': value
-                  });
+                  if (PbInstance.isTeacher) {
+                    await PbInstance.getPb()
+                        .collection('teacher_student_ratings')
+                        .create(body: {
+                      'student': _studentList.entries
+                          .firstWhere(
+                              (element) => element.value == _dropDownValue)
+                          .key,
+                      'teacher': PbInstance.id,
+                      'type': i,
+                      'value': value
+                    });
+                  } else {
+                    await PbInstance.getPb()
+                        .collection('student_teacher_ratings')
+                        .create(body: {
+                      'student': PbInstance.id,
+                      'teacher': _teacherList.entries
+                          .firstWhere(
+                              (element) => element.value == _dropDownValue)
+                          .key,
+                      'type': i,
+                      'value': value
+                    });
+                  }
                   i++;
                 }
                 showSnackBar(context, 'Rating successful');
                 setState(() {
                   _teacherList.clear();
                 });
-                _data_fetched = false;
+                _dataFetched = false;
               },
               child: const Text('Send feedback'),
             )

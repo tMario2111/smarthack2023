@@ -31,8 +31,8 @@ class _HomeRouteState extends State<HomeRoute> {
           WaveWidget(
             config: CustomConfig(
               gradients: [
-                  [Colors.purple[500]!, Colors.purple[100]!],
-                  [Colors.deepPurple[300]!, Colors.deepPurple[50]!],
+                [Colors.purple[500]!, Colors.purple[100]!],
+                [Colors.deepPurple[300]!, Colors.deepPurple[50]!],
               ],
               durations: [19440, 10800],
               heightPercentages: [0.50, 0.55],
@@ -85,9 +85,11 @@ class _HomeRouteState extends State<HomeRoute> {
                           ),
                         ),
                         const SizedBox(height: 5),
-                        const Text(
-                          'Always stay updated in your student portal',
-                          style: TextStyle(
+                        Text(
+                          PbInstance.isTeacher
+                              ? 'Always stay updated in your teacher portal'
+                              : 'Always stay updated in your student portal',
+                          style: const TextStyle(
                             color: Color.fromARGB(158, 255, 255, 255),
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
@@ -100,7 +102,9 @@ class _HomeRouteState extends State<HomeRoute> {
                         padding: const EdgeInsets.only(bottom: 0),
                         alignment: Alignment.centerRight,
                         child: Image.asset(
-                          '../../assets/welcome_student.png',
+                          PbInstance.isTeacher
+                              ? '../../assets/welcome_teacher.png'
+                              : '../../assets/welcome_student.png',
                           width: 400,
                           height: 400,
                         ),
