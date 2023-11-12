@@ -4,6 +4,7 @@ import 'package:simple_circular_progress_bar/simple_circular_progress_bar.dart';
 import '../pb_instance.dart';
 import '../util.dart';
 import '../widgets/side_drawer.dart';
+import 'graph_route.dart';
 
 class ProgressRoute extends StatefulWidget {
   const ProgressRoute({Key? key}) : super(key: key);
@@ -92,39 +93,51 @@ class _ProgressRouteState extends State<ProgressRoute> {
           );
         });
         _progressBarRows.add(
-          Container(
-            margin: const EdgeInsets.all(20.0),
-            padding: const EdgeInsets.all(16.0),
-            width: MediaQuery.of(context).size.width * 0.8,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10.0),
-              gradient: const LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [Colors.cyan, Colors.purple],
+          InkWell(
+            child: Container(
+              margin: const EdgeInsets.all(20.0),
+              padding: const EdgeInsets.all(16.0),
+              width: MediaQuery.of(context).size.width * 0.8,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10.0),
+                gradient: const LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [Colors.cyan, Colors.purple],
+                ),
+              ),
+              child: Column(
+                children: [
+                  Text(
+                    'Feedback from $className',
+                    style: const TextStyle(
+                      fontSize: 25.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 45.0,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: progressBars,
+                  ),
+                  const SizedBox(
+                    height: 50.0,
+                  ),
+                ],
               ),
             ),
-            child: Column(
-              children: [
-                Text(
-                  'Feedback from $className',
-                  style: const TextStyle(
-                    fontSize: 25.0,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(
-                  height: 45.0,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: progressBars,
-                ),
-                const SizedBox(
-                  height: 50.0,
-                ),
-              ],
-            ),
+            onTap: () {
+              final graphData = <String, List<int>>{};
+              value1.forEach((key, value) {
+                graphData[getStudentTeacherScoreTypeString(key)] = value;
+              });
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => GraphRoute(ratings: graphData)));
+            },
           ),
         );
       });
@@ -187,39 +200,51 @@ class _ProgressRouteState extends State<ProgressRoute> {
           );
         });
         _progressBarRows.add(
-          Container(
-            margin: const EdgeInsets.all(20.0),
-            padding: const EdgeInsets.all(16.0),
-            width: MediaQuery.of(context).size.width * 0.8,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10.0),
-              gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [Colors.purple.shade800, Colors.deepPurple.shade800],
+          InkWell(
+            child: Container(
+              margin: const EdgeInsets.all(20.0),
+              padding: const EdgeInsets.all(16.0),
+              width: MediaQuery.of(context).size.width * 0.8,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10.0),
+                gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [Colors.purple.shade800, Colors.deepPurple.shade800],
+                ),
+              ),
+              child: Column(
+                children: [
+                  Text(
+                    'Feedback from $teacherName',
+                    style: const TextStyle(
+                      fontSize: 25.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 45.0,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: progressBars,
+                  ),
+                  const SizedBox(
+                    height: 50.0,
+                  ),
+                ],
               ),
             ),
-            child: Column(
-              children: [
-                Text(
-                  'Feedback from $teacherName',
-                  style: const TextStyle(
-                    fontSize: 25.0,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(
-                  height: 45.0,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: progressBars,
-                ),
-                const SizedBox(
-                  height: 50.0,
-                ),
-              ],
-            ),
+            onTap: () {
+              final graphData = <String, List<int>>{};
+              value.forEach((key, value) {
+                graphData[getTeacherStudentScoreTypeString(key)] = value;
+              });
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => GraphRoute(ratings: graphData)));
+            },
           ),
         );
       });
