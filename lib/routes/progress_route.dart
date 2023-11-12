@@ -30,7 +30,7 @@ class _ProgressRouteState extends State<ProgressRoute> {
       for (final cl in classes) {
         final ratings = (await pb
                 .collection('student_teacher_ratings')
-                .getList(filter: 'teacher.id = "$id"'))
+                .getList(filter: 'teacher.id = "$id"', expand: 'student'))
             .items;
         for (final rating in ratings) {
           if (_teacherRatings[cl.getStringValue('name')] == null) {
@@ -43,15 +43,22 @@ class _ProgressRouteState extends State<ProgressRoute> {
             _teacherRatings[cl.getStringValue('name')]![StudentTeacherScoreType
                 .values[rating.getIntValue('type')]] = [];
           }
-          _teacherRatings[cl.getStringValue('name')]![
-                  StudentTeacherScoreType.values[rating.getIntValue('type')]]!
-              .add(rating.getIntValue('value'));
+          if ((await pb
+                      .collection('students')
+                      .getOne(rating.expand['student']![0].id, expand: 'class'))
+                  .expand['class']![0]
+                  .id ==
+              cl.id) {
+            _teacherRatings[cl.getStringValue('name')]![
+                    StudentTeacherScoreType.values[rating.getIntValue('type')]]!
+                .add(rating.getIntValue('value'));
+          }
         }
       }
 
-      _teacherRatings.forEach((className, value) {
+      _teacherRatings.forEach((className, value1) {
         final progressBars = <Widget>[];
-        value.forEach((key, value) {
+        value1.forEach((key, value) {
           final averageRating = value.fold(0, (p, c) => p + c) / value.length;
           progressBars.add(
             Column(
@@ -93,7 +100,7 @@ class _ProgressRouteState extends State<ProgressRoute> {
             width: MediaQuery.of(context).size.width * 0.8,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10.0),
-              gradient: LinearGradient(
+              gradient: const LinearGradient(
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
                 colors: [Colors.cyan, Colors.purple],
