@@ -3,8 +3,8 @@ import 'package:wave/config.dart';
 import 'package:wave/wave.dart';
 
 import '../routes/home_route.dart';
-import '../routes/progress_route.dart';
 import '../routes/feedback_route.dart';
+import 'package:smarthack2023/routes/progress_route.dart' as pg;
 
 Drawer sideDrawer(BuildContext context) {
   return Drawer(
@@ -46,76 +46,62 @@ Drawer sideDrawer(BuildContext context) {
                     ),
                   ),
                   const SizedBox(height: 50),
-                  ListTile(
-                    title: const Text(
-                      'Dashboard',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 20,
+                  buildMenuItem('Dashboard', Icons.dashboard, () {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const HomeRoute(),
                       ),
-                    ),
-                    onTap: () {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const HomeRoute(),
-                        ),
-                      );
-                    },
-                  ),
-                  ListTile(
-                    title: const Text(
-                      'My Progress',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 20,
+                    );
+                  }),
+                  buildMenuItem('My Progress', Icons.show_chart, () {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const pg.ProgressRoute(),
                       ),
-                    ),
-                    onTap: () {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const ProgressRoute(),
-                        ),
-                      );
-                    },
-                  ),
-                  ListTile(
-                    title: const Text(
-                      'Feedback',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 20,
+                    );
+                  }),
+                  buildMenuItem('Feedback', Icons.feedback, () {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const FeedbackRoute(),
                       ),
-                    ),
-                    onTap: () {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const FeedbackRoute(),
-                        ),
-                      );
-                    },
-                  ),
+                    );
+                  }),
                 ],
               ),
             ],
           ),
         ),
         const Divider(),
-        ListTile(
-          title: const Row(
-            children: [
-              Icon(Icons.logout),
-              SizedBox(width: 10),
-              Text('Logout'),
-            ],
-          ),
-          onTap: () {
-            Navigator.pop(context);
-          },
-        ),
+        buildMenuItem('Logout', Icons.logout, () {
+          Navigator.pop(context);
+        }),
       ],
+    ),
+  );
+}
+
+Widget buildMenuItem(String title, IconData icon, VoidCallback onTap) {
+  return InkWell(
+    onTap: onTap,
+    child: Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Row(
+        children: [
+          Icon(icon, color: Colors.white),
+          const SizedBox(width: 10),
+          Text(
+            title,
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 20,
+            ),
+          ),
+        ],
+      ),
     ),
   );
 }

@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
-
-import '../widgets/side_drawer.dart';
-
-import '../pb_instance.dart';
-
-import '../util.dart';
-
 import 'package:simple_circular_progress_bar/simple_circular_progress_bar.dart';
 
+import '../pb_instance.dart';
+import '../util.dart';
+import '../widgets/side_drawer.dart';
+
 class ProgressRoute extends StatefulWidget {
-  const ProgressRoute({super.key});
+  const ProgressRoute({Key? key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _ProgressRouteState();
@@ -19,7 +16,7 @@ class _ProgressRouteState extends State<ProgressRoute> {
   var _dataFetched = false;
   final _studentRatings = <String, Map<TeacherStudentScoreType, List<int>>>{};
   final _teacherRatings = <String, Map<StudentTeacherScoreType, List<int>>>{};
-  final _progressBarRows = <Column>[];
+  final _progressBarRows = <Widget>[];
 
   void _getData() async {
     final pb = PbInstance.getPb();
@@ -51,8 +48,9 @@ class _ProgressRouteState extends State<ProgressRoute> {
               .add(rating.getIntValue('value'));
         }
       }
+
       _teacherRatings.forEach((className, value) {
-        final progressBars = <Column>[];
+        final progressBars = <Widget>[];
         value.forEach((key, value) {
           final averageRating = value.fold(0, (p, c) => p + c) / value.length;
           progressBars.add(
@@ -89,31 +87,42 @@ class _ProgressRouteState extends State<ProgressRoute> {
           );
         });
         _progressBarRows.add(
-          Column(
-            children: [
-              Text(
-                'Feedback from $className',
-                style: const TextStyle(
-                  fontSize: 25.0,
-                  fontWeight: FontWeight.bold,
+          Container(
+            margin: const EdgeInsets.all(20.0),
+            padding: const EdgeInsets.all(16.0),
+            width: MediaQuery.of(context).size.width * 0.8,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10.0),
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [Colors.cyan, Colors.purple],
+              ),
+            ),
+            child: Column(
+              children: [
+                Text(
+                  'Feedback from $className',
+                  style: const TextStyle(
+                    fontSize: 25.0,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-              ),
-              const SizedBox(
-                height: 45.0,
-              ),
-              Wrap(
-                spacing: 150.0,
-                children: progressBars,
-              ),
-              const SizedBox(
-                height: 50.0,
-              )
-            ],
+                const SizedBox(
+                  height: 45.0,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: progressBars,
+                ),
+                const SizedBox(
+                  height: 50.0,
+                ),
+              ],
+            ),
           ),
         );
       });
-      _dataFetched = true;
-      setState(() {});
     } else {
       final list = await pb.collection('teacher_student_ratings').getList(
           filter: 'student.id = "$id"', expand: 'teacher', sort: 'type');
@@ -136,7 +145,7 @@ class _ProgressRouteState extends State<ProgressRoute> {
       }
 
       _studentRatings.forEach((teacherName, value) {
-        final progressBars = <Column>[];
+        final progressBars = <Widget>[];
         value.forEach((key, value) {
           final averageRating = value.fold(0, (p, c) => p + c) / value.length;
           progressBars.add(
@@ -173,33 +182,46 @@ class _ProgressRouteState extends State<ProgressRoute> {
           );
         });
         _progressBarRows.add(
-          Column(
-            children: [
-              Text(
-                'Feedback from $teacherName',
-                style: const TextStyle(
-                  fontSize: 25.0,
-                  fontWeight: FontWeight.bold,
+          Container(
+            margin: const EdgeInsets.all(20.0),
+            padding: const EdgeInsets.all(16.0),
+            width: MediaQuery.of(context).size.width * 0.8,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10.0),
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [Colors.purple.shade800, Colors.deepPurple.shade800],
+              ),
+            ),
+            child: Column(
+              children: [
+                Text(
+                  'Feedback from $teacherName',
+                  style: const TextStyle(
+                    fontSize: 25.0,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-              ),
-              const SizedBox(
-                height: 45.0,
-              ),
-              Wrap(
-                spacing: 150.0,
-                children: progressBars,
-              ),
-              const SizedBox(
-                height: 50.0,
-              )
-            ],
+                const SizedBox(
+                  height: 45.0,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: progressBars,
+                ),
+                const SizedBox(
+                  height: 50.0,
+                ),
+              ],
+            ),
           ),
         );
       });
-
-      _dataFetched = true;
-      setState(() {});
     }
+
+    _dataFetched = true;
+    setState(() {});
   }
 
   @override
@@ -219,21 +241,7 @@ class _ProgressRouteState extends State<ProgressRoute> {
               const SizedBox(
                 height: 25.0,
               ),
-              Row(
-                children: [
-                  const SizedBox(
-                    width: 25.0,
-                  ),
-                  Expanded(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children:
-                          _progressBarRows.isEmpty ? [] : _progressBarRows,
-                    ),
-                  ),
-                ],
-              ),
+              ..._progressBarRows,
             ],
           ),
         ),
