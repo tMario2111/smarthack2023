@@ -35,7 +35,7 @@ class _HomeRouteState extends State<HomeRoute> {
                   [Colors.deepPurple[300]!, Colors.deepPurple[50]!],
               ],
               durations: [19440, 10800],
-              heightPercentages: [0.55, 0.60],
+              heightPercentages: [0.50, 0.55],
               gradientBegin: Alignment.bottomLeft,
               gradientEnd: Alignment.topRight,
             ),
