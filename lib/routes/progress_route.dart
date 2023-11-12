@@ -72,9 +72,7 @@ class _ProgressRouteState extends State<ProgressRoute> {
                   animationDuration: 1,
                   onGetText: (p0) {
                     return Text(
-                      key == StudentTeacherScoreType.comunicationSkills
-                          ? "${p0.toStringAsFixed(2)}%"
-                          : "${(p0 / 10.0).floor()}.${p0.floor() % 10} / 10",
+                      "${(p0 / 10.0).floor()}.${p0.floor() % 10} / 10",
                       style: const TextStyle(
                           fontSize: 20, fontWeight: FontWeight.bold),
                     );
