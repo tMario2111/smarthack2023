@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 enum TeacherStudentScoreType {
   classActivity,
   attendance,
@@ -28,4 +30,26 @@ String getStudentTeacherScoreTypeString(StudentTeacherScoreType scoreType) {
   } else {
     return 'Student Interactions';
   }
+}
+
+void showSnackBar(BuildContext context, String content) {
+  ScaffoldMessenger.of(context)
+    ..removeCurrentSnackBar()
+    ..showSnackBar(
+      SnackBar(
+        content: Text(
+          content,
+          style: const TextStyle(
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        backgroundColor: Colors.purple,
+        behavior: SnackBarBehavior.floating,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(
+            Radius.circular(0.0),
+          ),
+        ),
+      ),
+    );
 }
