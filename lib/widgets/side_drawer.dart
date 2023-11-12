@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:wave/config.dart';
+import 'package:wave/wave.dart';
 
 import '../routes/home_route.dart';
 import '../routes/progress_route.dart';
@@ -9,47 +11,93 @@ Drawer sideDrawer(BuildContext context) {
     child: Column(
       children: [
         Expanded(
-          child: ListView(
-            padding: EdgeInsets.zero,
+          child: Stack(
+            alignment: Alignment.bottomCenter,
             children: [
-              const DrawerHeader(
-                decoration: BoxDecoration(
-                  color: Colors.purple,
+              WaveWidget(
+                config: CustomConfig(
+                  gradients: [
+                    [Colors.purple[500]!, Colors.purple[100]!],
+                    [Colors.deepPurple[300]!, Colors.deepPurple[50]!],
+                  ],
+                  durations: [19440, 10800],
+                  heightPercentages: [0.10, 0.14],
+                  gradientBegin: Alignment.bottomLeft,
+                  gradientEnd: Alignment.topRight,
                 ),
-                child: Text(
-                  'Menu',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 24,
+                waveAmplitude: 0,
+                size: const Size(double.infinity, double.infinity),
+              ),
+              ListView(
+                padding: EdgeInsets.zero,
+                children: [
+                  const DrawerHeader(
+                    decoration: BoxDecoration(
+                      color: Colors.transparent,
+                    ),
+                    child: Center(
+                      child: Text(
+                        'Menu',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 40,
+                        ),
+                      ),
+                    ),
                   ),
-                ),
-              ),
-              ListTile(
-                title: const Text('Dashboard'),
-                onTap: () {
-                  Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const HomeRoute()));
-                },
-              ),
-              ListTile(
-                title: const Text('My Progress'),
-                onTap: () {
-                  Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const ProgressRoute()));
-                },
-              ),
-              ListTile(
-                title: const Text('Feedback'),
-                onTap: () {
-                  Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const FeedbackRoute()));
-                },
+                  const SizedBox(height: 50),
+                  ListTile(
+                    title: const Text(
+                      'Dashboard',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                      ),
+                    ),
+                    onTap: () {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const HomeRoute(),
+                        ),
+                      );
+                    },
+                  ),
+                  ListTile(
+                    title: const Text(
+                      'My Progress',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                      ),
+                    ),
+                    onTap: () {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const ProgressRoute(),
+                        ),
+                      );
+                    },
+                  ),
+                  ListTile(
+                    title: const Text(
+                      'Feedback',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                      ),
+                    ),
+                    onTap: () {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const FeedbackRoute(),
+                        ),
+                      );
+                    },
+                  ),
+                ],
               ),
             ],
           ),
@@ -64,7 +112,6 @@ Drawer sideDrawer(BuildContext context) {
             ],
           ),
           onTap: () {
-            // Implement your logout functionality here
             Navigator.pop(context);
           },
         ),

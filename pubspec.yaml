@@ -38,6 +38,7 @@ dependencies:
   pocketbase: ^0.16.0
   simple_circular_progress_bar: ^1.0.2
   intl: ^0.18.1
+  wave: ^0.2.2
 
 dev_dependencies:
   flutter_test:
